@@ -1,80 +1,42 @@
-// Programa: Sensor de som KY-038
-// Definicao pinos leds
-// int pinoled_ver = 3;
-// int pinoled_ama = 4;
-// int pinoled_verm = 5;
 
-// Definicao pinos sensor
+/**
+ * @brief This code reads the value from the analog port A0 and compares it to a maximum value
+ * If the value read from A0 is greater than the maximum value, it triggers the alert
+ * This is useful to detect when the volume of the cluster 2 is too high.
+ */
+
+/** Analog Pin Setting. */
 int pino_analogico = 34;
-/**
- * Pino digital não está sendo usado.
- */
-int pino_digital = 5;
 
+/** Saves the value of the analog pin output. */
 int valor_A0 = 0;
-/**
- * Valor do pino analogico.
- */
-int valor_D = 0;
 
-/**
- * Valor máximo atingido pelo sensor
- */
+/** Save the max value of the analog pin output. */
 int max_value = 0;
+/** Max value Tolerated. */
+int max_tolerance = 100;
 
 void setup(void)
 {
 	Serial.begin(115200);
-	// Define pinos led como saida
-	// pinMode(pinoled_ver, OUTPUT);
-	// pinMode(pinoled_ama, OUTPUT);
-	// pinMode(pinoled_verm, OUTPUT);
-	// Define pinos sensor como entrada
 	pinMode(pino_analogico, INPUT);
-	pinMode(pino_digital, INPUT);
 }
 
 void loop(void)
 {
 	valor_A0 = analogRead(pino_analogico);
-	valor_D = digitalRead(pino_digital);
 	Serial.print("Saida A0: ");
 	Serial.print(valor_A0);
-	Serial.print(" Saida D0: ");
-	Serial.print(valor_D);
 	Serial.print(" Maior volume: ");
 	Serial.println(max_value);
+	// saves the max value
 	if (valor_A0 > max_value)
 		max_value = valor_A0;
-	// Disparar alerta
-	// if (valor_A0 > 30) {
-	//   Serial.print("Volume máximo atingido");
-	//   delay(5000);
-	// }
-	// Intensidade baixa
-	if (valor_A0 > 20 && valor_A0 < 300)
+	// Trigger alert if noise level is above max tolerance
+	if (valor_A0 > max_tolerance)
 	{
-		// digitalWrite(pinoled_ver, HIGH);
-		// digitalWrite(pinoled_ama, LOW);
-		// digitalWrite(pinoled_verm, LOW);
-	}
-	// Intensidade media
-	if (valor_A0 > 301 && valor_A0 < 700)
-	{
-		// digitalWrite(pinoled_ver, HIGH);
-		// digitalWrite(pinoled_ama, HIGH);
-		// digitalWrite(pinoled_verm, LOW);
-	}
-	// Intensidade alta
-	if (valor_A0 > 701)
-	{
-		// digitalWrite(pinoled_ver, HIGH);
-		// digitalWrite(pinoled_ama, HIGH);
-		// digitalWrite(pinoled_verm, HIGH);
+		Serial.print("Volume máximo atingido");
+		delay(5000);
 	}
 	delay(500);
-	// Apaga todos os leds
-	// digitalWrite(pinoled_ver, LOW);
-	// digitalWrite(pinoled_ama, LOW);
-	// digitalWrite(pinoled_verm, LOW);
 }
