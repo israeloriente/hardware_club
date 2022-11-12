@@ -14,7 +14,7 @@ int valor_A0 = 0;
 /** Save the max value of the analog pin output. */
 int max_value = 0;
 /** Max value Tolerated. */
-int max_tolerance = 100;
+int max_tolerance = 50;
 
 void setup(void)
 {
@@ -38,5 +38,5 @@ void loop(void)
 		Serial.print("Volume máximo atingido");
 		delay(5000);
 	}
-	delay(500);
+	delay(1000);
 }
